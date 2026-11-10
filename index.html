@@ -175,7 +175,7 @@ th{font-size:12px;color:var(--muted);font-weight:600;border-top:none}
 
 <script>
 /* ---------- Configuration ---------- */
-const START = new Date(2026, 10, 16);   // lundi 16 novembre 2026
+const START = new Date(2026, 10, 9);    // lundi 9 novembre 2026
 const RACE  = new Date(2027, 4, 15);    // samedi 15 mai 2027
 const SEMI  = 21.0975;
 const KEY   = 'prepa-semi-2027';
@@ -191,8 +191,17 @@ const ZONES = {
 };
 
 /* ---------- State ---------- */
-let state = {done:{}, ref:{dist:SEMI, time:7560}, target:6000};
-try { const s = JSON.parse(localStorage.getItem(KEY)); if (s) state = Object.assign(state, s); } catch(e){}
+let state = {v:2, done:{}, ref:{dist:SEMI, time:7560}, target:6000};
+/* v1 → v2 : une semaine a été ajoutée au début, on décale les séances cochées */
+function migrate(s){
+  if (s && !s.v && s.done) {
+    const d = {};
+    Object.keys(s.done).forEach(k => { const m = k.match(/^w(\d+)s(\d+)$/); d[m ? 'w'+(+m[1]+1)+'s'+m[2] : k] = s.done[k]; });
+    s.done = d; s.v = 2;
+  }
+  return s;
+}
+try { const s = migrate(JSON.parse(localStorage.getItem(KEY))); if (s) state = Object.assign(state, s); } catch(e){}
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 
 /* ---------- Pace math ---------- */
@@ -296,7 +305,10 @@ const PHASES = [
 ];
 
 const WEEKS = [
-  {ph:0, note:"Semaine de reprise : ton semi est encore dans les jambes, tout se fait en facile.", s:[
+  {ph:0, light:true, note:"Semaine post-semi : récupération active. Attends 3-4 jours après la course avant la 1re sortie. Si les courbatures sont encore là, remplace par 30 min de vélo ou de marche.", s:[
+    {t:'foot', title:'Footing récup 25 min', why:"Faire circuler le sang pour éliminer la fatigue du semi. Aucun objectif de performance.", blocks:[E(25, "Très lent, même plus lent que d'habitude")], tip:TIPS.foot},
+    {t:'foot', title:'Footing récup 30 min', why:"Deuxième sortie tranquille pour vérifier que tout va bien (mollets, tendons, genoux) avant de reprendre le programme.", blocks:[E(30)], tip:"Si une douleur précise persiste (pas juste une raideur), coupe 3-4 jours de plus : la prépa est longue, rien ne presse."}]},
+  {ph:0, note:"Semaine de reprise : le semi est encore un peu dans les jambes, tout se fait en facile.", s:[
     {t:'foot', title:'Footing de reprise 35 min', why:"Relancer la machine après ton semi, sans forcer.", blocks:[E(35)], tip:TIPS.foot},
     foot(40, 4, "Footing facile, et quelques accélérations pour réveiller la foulée.")]},
   {ph:0, s:[foot(40, 6), sl(55)]},
