@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prépa Semi · 15 mai 2027</title>
+<style>
+:root{
+  --bg:#f5f4ef;--card:#ffffff;--ink:#1c1c1a;--muted:#6c6b65;--line:#e3e1d9;
+  --accent:#e4572e;--accent-soft:#fde9e2;--ok:#2e8b57;--ok-soft:#e2f2e8;
+  --z-EF:#4f9d69;--z-FART:#9bbf5a;--z-SEUIL:#e0a100;--z-10K:#e4572e;--z-5K:#b0263b;
+  --z-AS:#3d6fd8;--z-COTE:#8a5a44;--z-REC:#cfccc2;--z-LD:#7a7a7a;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#131312;--card:#1d1d1b;--ink:#f0efe9;--muted:#a2a097;--line:#32322e;
+  --accent-soft:#3b231a;--ok-soft:#173222;--z-REC:#4a4943;--z-LD:#9a9a9a;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 80px}
+header{padding:28px 0 12px}
+header h1{font-size:26px;margin:0 0 4px;letter-spacing:-.02em}
+header p{margin:0;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 6px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+.stat b{display:block;font-size:22px;letter-spacing:-.02em}
+.stat span{color:var(--muted);font-size:12px}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:10px 0 4px}
+.progress i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:16px}
+nav button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 6px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer}
+nav button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab{display:none}.tab.on{display:block}
+.phase{margin:26px 0 10px}
+.phase h2{font-size:18px;margin:0}
+.phase p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.week{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
+.week.current{border:2px solid var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.week.done{opacity:.75}
+.whead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.whead h3{margin:0;font-size:16px}
+.whead .dates{color:var(--muted);font-size:13px}
+.badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--line);color:var(--ink);text-transform:uppercase;letter-spacing:.03em}
+.badge.now{background:var(--accent);color:#fff}
+.badge.light{background:var(--ok-soft);color:var(--ok)}
+.wnote{font-size:13px;color:var(--muted);margin:6px 0 2px}
+.sess{display:flex;gap:10px;align-items:flex-start;border-top:1px solid var(--line);padding:10px 0 4px;margin-top:10px}
+.sess input[type=checkbox]{width:24px;height:24px;margin:2px 0 0;accent-color:var(--ok);flex:none;cursor:pointer}
+.sess details{flex:1;min-width:0}
+.sess summary{list-style:none;cursor:pointer}
+.sess summary::-webkit-details-marker{display:none}
+.stitle{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stitle h4{margin:0;font-size:15px}
+.sess.isdone h4{text-decoration:line-through;color:var(--muted)}
+.tag{font-size:11px;font-weight:700;color:#fff;padding:1px 7px;border-radius:6px}
+.dur{color:var(--muted);font-size:13px;margin-left:auto}
+.more{font-size:12px;color:var(--accent);font-weight:600}
+details[open] .more{display:none}
+.bar{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:7px 0 2px;gap:1px}
+.bar i{display:block;height:100%}
+.donedate{font-size:12px;color:var(--ok);font-weight:600}
+.body{padding:6px 0 4px;font-size:14px}
+.why{color:var(--muted);margin:4px 0 8px}
+ol.steps{margin:0;padding-left:20px}
+ol.steps>li{margin:6px 0}
+ol.steps ul{margin:4px 0;padding-left:18px}
+.lbl{font-weight:700}
+.pace{display:inline-block;font-weight:700;padding:0 6px;border-radius:5px;background:var(--bg);border:1px solid var(--line);white-space:nowrap;font-variant-numeric:tabular-nums}
+.small{font-size:12px;color:var(--muted)}
+.tip{background:var(--accent-soft);border-radius:10px;padding:10px 12px;margin:10px 0 4px;font-size:13.5px}
+.tip b{display:block;margin-bottom:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.card h3{margin:0 0 8px;font-size:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.row label{display:flex;flex-direction:column;font-size:13px;color:var(--muted);gap:4px;flex:1;min-width:130px}
+input[type=text],select{font:inherit;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.btn{font:inherit;font-weight:600;padding:9px 14px;border-radius:10px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{text-align:left;padding:9px 6px;border-top:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600;border-top:none}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.lex dt{font-weight:700;margin-top:14px}
+.lex dd{margin:3px 0 0;color:var(--ink)}
+.lex dd p{margin:4px 0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted);margin:6px 0}
+.warn{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:13.5px;margin-top:10px}
+.inline-test{display:flex;gap:8px;margin-top:8px}
+.inline-test input{max-width:140px}
+@media (max-width:480px){.stat b{font-size:18px}.dur{margin-left:0;width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Prépa Semi-marathon</h1>
+    <p>Course le samedi 15 mai 2027 · 2 sorties par semaine, dans l'ordre que tu veux</p>
+    <div class="stats">
+      <div class="stat"><b id="st-days">–</b><span>jours avant la course</span></div>
+      <div class="stat"><b id="st-done">–</b><span>séances faites</span></div>
+      <div class="stat"><b id="st-target">–</b><span>allure objectif</span></div>
+    </div>
+    <div class="progress"><i id="prog"></i></div>
+  </header>
+
+  <nav>
+    <button data-tab="plan" class="on">Programme</button>
+    <button data-tab="paces">Allures</button>
+    <button data-tab="lex">Comprendre</button>
+  </nav>
+
+  <section class="tab on" id="tab-plan">
+    <div class="legend" id="legend"></div>
+    <p class="small">Clique sur une séance pour voir le déroulé détaillé. Espace tes 2 sorties d'au moins 48 h, et évite la sortie longue le lendemain d'un match de foot.</p>
+    <div id="plan"></div>
+  </section>
+
+  <section class="tab" id="tab-paces">
+    <div class="card">
+      <h3>Ton chrono de référence</h3>
+      <p class="small" style="margin-top:0">Ton dernier chrono sert à calculer toutes les allures d'entraînement. Mets-le à jour après le test 10 km de mars, ou si les séances deviennent trop faciles.</p>
+      <div class="row">
+        <label>Distance
+          <select id="ref-dist">
+            <option value="5">5 km</option>
+            <option value="10">10 km</option>
+            <option value="21.0975">Semi-marathon</option>
+          </select>
+        </label>
+        <label>Temps (ex. 2h06, 45:30)
+          <input type="text" id="ref-time">
+        </label>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label>Objectif au semi
+          <select id="target">
+            <option value="6300">1h45 (4'59/km)</option>
+            <option value="6000">1h40 (4'44/km)</option>
+            <option value="5700">1h35 (4'30/km)</option>
+            <option value="custom">Autre…</option>
+          </select>
+        </label>
+        <label id="custom-wrap" style="display:none">Objectif perso (ex. 1h38)
+          <input type="text" id="target-custom">
+        </label>
+      </div>
+      <div style="margin-top:12px"><button class="btn" id="save-paces">Recalculer</button></div>
+      <div id="pace-msg"></div>
+    </div>
+
+    <div class="card">
+      <h3>Tes allures actuelles</h3>
+      <table id="pace-table"></table>
+    </div>
+
+    <div class="card">
+      <h3>Sauvegarde</h3>
+      <p class="small" style="margin-top:0">Ta progression est enregistrée dans ce navigateur. Pour changer de téléphone ou d'ordinateur, exporte un fichier puis importe-le sur l'autre appareil.</p>
+      <div class="row">
+        <button class="btn ghost" id="export">Exporter</button>
+        <button class="btn ghost" id="import-btn">Importer</button>
+        <button class="btn ghost" id="reset">Tout décocher</button>
+        <input type="file" id="import" accept="application/json" hidden>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-lex">
+    <div class="card lex">
+      <h3>Le vocabulaire, simplement</h3>
+      <dl id="lexique"></dl>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ---------- Configuration ---------- */
+const START = new Date(2026, 10, 16);   // lundi 16 novembre 2026
+const RACE  = new Date(2027, 4, 15);    // samedi 15 mai 2027
+const SEMI  = 21.0975;
+const KEY   = 'prepa-semi-2027';
+
+const ZONES = {
+  EF:   {name:'Endurance fondamentale', short:'EF', f:[1.15,1.25], eff:'3–4/10', talk:'Tu peux tenir une conversation complète.', use:'Footings, sortie longue, échauffement, récup.'},
+  FART: {name:'Un peu vite', short:'Fartlek', f:[0.99,1.06], eff:'6/10', talk:'Tu respires fort mais tu restes en contrôle.', use:'Fartlek (découverte du changement de rythme).'},
+  SEUIL:{name:'Seuil', short:'Seuil', f:[0.97,0.985], eff:'7/10', talk:'Tu peux dire 3-4 mots, pas plus.', use:'Blocs de 6 à 15 min. Le cœur de la prépa.'},
+  AS:   {name:'Allure semi (objectif)', short:'Allure semi', eff:'6–7/10', talk:'Soutenu mais tenable longtemps.', use:'Blocs à allure course, à partir de mars.'},
+  '10K':{name:'Allure 10 km', short:'10 km', f:[0.956], eff:'8/10', talk:'Impossible de parler.', use:'Répétitions de 1000 à 1500 m.'},
+  '5K': {name:'Allure 5 km (VMA)', short:'VMA', f:[0.917], eff:'9/10', talk:'Très dur, mais contrôlé.', use:'Répétitions courtes (400 m).'},
+  COTE: {name:'Côte', short:'Côtes', eff:'8–9/10', talk:'Effort fort sur une pente.', use:'Côtes de 30 s.'}
+};
+
+/* ---------- State ---------- */
+let state = {done:{}, ref:{dist:SEMI, time:7560}, target:6000};
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s) state = Object.assign(state, s); } catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+/* ---------- Pace math ---------- */
+const semiEq = () => state.ref.time * Math.pow(SEMI / state.ref.dist, 1.06);
+const P = () => semiEq() / SEMI;                 // allure semi actuelle (s/km)
+function paceRange(z){
+  if (z === 'AS') { const a = state.target / SEMI; return [a, a]; }
+  const f = ZONES[z].f; if (!f) return null;
+  return [P()*f[0], P()*(f[1]||f[0])];
+}
+const paceMid = z => { const r = paceRange(z); return r ? (r[0]+r[1])/2 : 0; };
+function fmtPace(s){ s = Math.round(s); return Math.floor(s/60) + "'" + String(s%60).padStart(2,'0'); }
+function fmtDur(s){
+  s = Math.round(s);
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
+  if (h) return h + 'h' + String(m).padStart(2,'0') + (sec ? "'" + String(sec).padStart(2,'0') : '');
+  if (!m) return sec + ' s';
+  return m + "'" + (sec ? String(sec).padStart(2,'0') : '00');
+}
+function paceStr(z){
+  const r = paceRange(z); if (!r) return '';
+  return (Math.abs(r[0]-r[1]) < 2 ? fmtPace(r[0]) : fmtPace(r[0]) + '–' + fmtPace(r[1])) + '/km';
+}
+function parseTime(str){
+  if (!str) return null;
+  let t = String(str).trim().toLowerCase().replace(/[h'’:"]+/g, ':').replace(/:$/, '');
+  const p = t.split(':').map(Number);
+  if (p.some(isNaN)) return null;
+  if (p.length === 3) return p[0]*3600 + p[1]*60 + p[2];
+  if (p.length === 2) return p[0] <= 3 ? p[0]*3600 + p[1]*60 : p[0]*60 + p[1];
+  if (p.length === 1) return p[0]*60;
+  return null;
+}
+
+/* ---------- Session builders ---------- */
+const E  = (min, note) => ['ef', min, note];
+const LD = n => ['ld', n];
+const R  = (reps, work, zone, rec) => ['rep', reps, work, zone, rec];
+
+function parseWork(w){
+  const m = String(w).match(/^([\d.]+)(min|s|km|m)$/);
+  const v = parseFloat(m[1]), u = m[2];
+  if (u === 'min') return {sec:v*60, label:v + ' min'};
+  if (u === 's')   return {sec:v, label:v + ' s'};
+  if (u === 'km')  return {m:v*1000, label:v + ' km'};
+  return {m:v, label:v + ' m'};
+}
+const workSec = (w, z) => { const p = parseWork(w); return p.sec ?? (p.m/1000)*paceMid(z); };
+const recSec = r => r === 'descente' ? 60 : r;
+
+const TIPS = {
+  sl:   "La sortie longue doit être lente. C'est normal de la trouver « trop facile » : c'est justement ce qui développe ton endurance, ton cœur et tes tendons. Au-delà d'1h15, prends de l'eau (flasque ou passage par un point d'eau).",
+  foot: "Si tu ne peux pas parler en phrases complètes, ralentis. Même si ça te paraît très lent : c'est l'erreur n°1 des coureurs qui viennent d'un sport collectif.",
+  fart: "« Fartlek » veut dire « jeu d'allure ». Aucune pression sur le chrono : accélère jusqu'à respirer fort tout en restant en contrôle (6/10), puis reviens à un trot tranquille. Pas besoin de montre, compte les minutes.",
+  cote: "Cherche une côte de 5 à 8 % : assez raide pour sentir l'effort, pas un mur. Monte en poussant fort, buste droit, petits pas rapides, bras actifs. Redescends en trottinant tranquillement : la descente, c'est ta récup.",
+  seuil:"Le seuil, c'est « confortablement difficile » (7/10) : tu peux dire 3-4 mots, pas plus. Toutes les répétitions doivent être à la même allure. Si la dernière est nettement plus lente que la première, tu es parti trop vite : la prochaine fois, ralentis de 5 s/km.",
+  vma:  "C'est dur (9/10), mais ça doit rester contrôlé : tu dois finir la dernière aussi vite que la première. Sur une piste, 400 m = 1 tour. Sinon, fie-toi à ta montre GPS ou fais l'effort au temps indiqué.",
+  k10:  "Allure de ton 10 km (8/10) : respiration forte, impossible de parler. Les récups sont courtes exprès, ne les rallonge pas. Si tu n'arrives pas à tenir l'allure sur les dernières, arrête-toi une répétition plus tôt : c'est mieux que de finir en vrac.",
+  as:   "C'est l'allure de ton objectif. Elle doit paraître « soutenue mais tenable ». Le but est de l'imprimer dans tes jambes : essaie de la reconnaître sans regarder la montre, puis vérifie.",
+  asl:  "Les blocs à allure semi arrivent en fin de sortie, sur des jambes déjà fatiguées : c'est exactement ce que tu vivras après le 15e km le jour J. Si l'allure ne vient pas, cours-les au seuil bas et ne force pas."
+};
+
+const foot = (min, ld, why) => ({t:'foot',
+  title: 'Footing ' + min + ' min' + (ld ? ' + lignes droites' : ''),
+  why: why || 'Footing facile pour construire ton endurance sans te fatiguer.',
+  blocks: ld ? [E(min), LD(ld)] : [E(min)], tip: TIPS.foot});
+
+const sl = (min, note) => ({t:'sl', title:'Sortie longue ' + fmtMin(min),
+  why:"La séance la plus importante : c'est elle qui te fera tenir 21 km. Tout en endurance fondamentale.",
+  blocks:[E(min, note)], tip:TIPS.sl});
+
+const slAS = (total, reps, work, rec) => {
+  const w = parseFloat(work), r = rec/60;
+  const warm = Math.round(total - reps*w - (reps-1)*r - 5);
+  return {t:'sl', title:'Sortie longue ' + fmtMin(total) + ' dont ' + (reps > 1 ? reps + ' × ' : '') + work.replace('min',' min') + ' allure semi',
+    why:"Sortie longue avec des blocs à ton allure de course à la fin, pour apprendre à la tenir fatigué.",
+    blocks:[E(warm), R(reps, work, 'AS', rec), E(5)], tip:TIPS.asl};
+};
+
+const seuil = (reps, min, rec) => ({t:'frac', title:'Seuil · ' + reps + ' × ' + min + ' min',
+  why:"Le seuil est l'allure que tu peux tenir environ 1h. C'est l'entraînement le plus rentable pour un semi : il repousse le moment où tu « exploses ».",
+  blocks:[E(15), LD(3), R(reps, min + 'min', 'SEUIL', rec), E(10)], tip:TIPS.seuil});
+
+const k10 = (reps, dist, rec) => ({t:'frac', title:'Fractionné · ' + reps + ' × ' + dist.replace('m',' m') + ' allure 10 km',
+  why:"Courir un peu plus vite que ton allure semi rend l'allure semi plus facile, par contraste.",
+  blocks:[E(20), LD(3), R(reps, dist, '10K', rec), E(10)], tip:TIPS.k10});
+
+const asI = (reps, dist, rec) => ({t:'frac', title:'Allure semi · ' + reps + ' × ' + dist.replace('km',' km'),
+  why:"Travail spécifique : tu cours à ton allure objectif, par morceaux, pour l'apprivoiser.",
+  blocks:[E(15), LD(3), R(reps, dist, 'AS', rec), E(10)], tip:TIPS.as});
+
+function fmtMin(m){ return m >= 60 ? Math.floor(m/60) + 'h' + (m%60 ? String(m%60).padStart(2,'0') : '') : m + ' min'; }
+
+/* ---------- Le programme ---------- */
+const PHASES = [
+  {name:'Phase 1 · Foncier', desc:"Reconstruire l'endurance et habituer tes tendons à courir. Quasiment tout en facile."},
+  {name:'Phase 2 · Seuil', desc:"On introduit le vrai fractionné. La sortie longue continue de s'allonger."},
+  {name:'Phase 3 · Montée en puissance', desc:"Séances plus longues, puis test 10 km pour fixer ton objectif réel."},
+  {name:'Phase 4 · Spécifique semi', desc:"On travaille à l'allure de course. C'est la période la plus exigeante."},
+  {name:'Phase 5 · Affûtage', desc:"On réduit le volume pour arriver frais, en gardant un peu d'intensité."}
+];
+
+const WEEKS = [
+  {ph:0, note:"Semaine de reprise : ton semi est encore dans les jambes, tout se fait en facile.", s:[
+    {t:'foot', title:'Footing de reprise 35 min', why:"Relancer la machine après ton semi, sans forcer.", blocks:[E(35)], tip:TIPS.foot},
+    foot(40, 4, "Footing facile, et quelques accélérations pour réveiller la foulée.")]},
+  {ph:0, s:[foot(40, 6), sl(55)]},
+  {ph:0, s:[{t:'frac', title:'Fartlek découverte · 8 × 1 min', why:"Premier contact avec le changement de rythme, sans pression de chrono.", blocks:[E(15), R(8,'1min','FART',60), E(10)], tip:TIPS.fart}, sl(60)]},
+  {ph:0, light:true, note:"Semaine allégée : on assimile le travail des 3 dernières semaines.", s:[foot(35, 6), sl(50)]},
+  {ph:0, s:[{t:'frac', title:'Côtes · 8 × 30 s', why:"Renforcer mollets, cuisses et foulée. C'est le meilleur « renfo » du coureur, et ça prépare tes tendons au fractionné.", blocks:[E(20), R(8,'30s','COTE','descente'), E(10)], tip:TIPS.cote}, sl(65)]},
+  {ph:0, note:"Semaine de Noël : si tu rates une séance, ne la rattrape pas, passe simplement à la suivante.", s:[
+    {t:'frac', title:'Fartlek · 6 × 2 min', why:"Des accélérations un peu plus longues, toujours sans pression sur le chrono.", blocks:[E(15), LD(3), R(6,'2min','FART',90), E(10)], tip:TIPS.fart}, sl(70)]},
+  {ph:1, note:"Semaine du Nouvel An. Première vraie séance de seuil : pars prudemment.", s:[seuil(3, 6, 120), sl(70)]},
+  {ph:1, light:true, note:"Semaine allégée.", s:[foot(40, 6), sl(60)]},
+  {ph:1, s:[seuil(3, 8, 120), sl(75)]},
+  {ph:1, s:[{t:'frac', title:'VMA · 10 × 400 m', why:"Des répétitions courtes et rapides pour développer ta vitesse maximale aérobie (ta « cylindrée »).", blocks:[E(20), LD(3), R(10,'400m','5K',75), E(10)], tip:TIPS.vma}, sl(80)]},
+  {ph:1, s:[seuil(3, 10, 120), sl(85)]},
+  {ph:1, light:true, note:"Semaine allégée.", s:[seuil(2, 10, 120), sl(65)]},
+  {ph:2, s:[k10(6, '1000m', 90), sl(90, "Les 10 dernières minutes un peu plus vite si tu te sens bien (6/10), sans jamais forcer.")]},
+  {ph:2, s:[seuil(2, 15, 180), sl(95)]},
+  {ph:2, s:[k10(5, '1500m', 120), sl(85)]},
+  {ph:2, test:true, note:"Semaine test ! Idéalement, inscris-toi à une course de 10 km officielle ce week-end-là : c'est plus motivant et plus fiable.", s:[
+    foot(35, 5, "Footing de veille, 2 ou 3 jours avant le test, pour arriver frais."),
+    {t:'test', title:'TEST · 10 km', why:"Mesurer ton vrai niveau pour ajuster l'objectif et toutes tes allures.", blocks:[['test']]}]},
+  {ph:3, note:"Après le test, mets à jour ton chrono dans l'onglet Allures : toutes les allures se recalculent.", s:[asI(3, '2km', 120), sl(90)]},
+  {ph:3, s:[seuil(3, 12, 120), slAS(100, 2, '10min', 180)]},
+  {ph:3, s:[k10(6, '1000m', 90), sl(100)]},
+  {ph:3, light:true, note:"Semaine allégée.", s:[seuil(2, 12, 120), sl(75)]},
+  {ph:3, s:[asI(3, '3km', 120), slAS(105, 2, '15min', 180)]},
+  {ph:3, s:[asI(2, '5km', 180), sl(100)]},
+  {ph:3, note:"Grosse séance de la prépa : la simulation. Fais-la reposé, pas le lendemain d'un match.", s:[
+    {t:'frac', title:'Simulation · 12 km allure semi', why:"La répétition générale : 12 km d'affilée à ton allure de course. Si ça passe, l'objectif est validé.", blocks:[E(15), LD(3), R(1,'12km','AS',0), E(10)], tip:"Pars 5 s/km plus lent que l'allure cible sur les 2 premiers km, puis cale-toi dessus. Teste ce que tu prendras le jour J : boisson, gel, chaussures, tenue."},
+    sl(90)]},
+  {ph:4, s:[seuil(3, 10, 120), slAS(80, 1, '20min', 0)]},
+  {ph:4, note:"Dernier match de foot cette semaine au plus tard : le risque d'entorse ou de contracture n'en vaut plus la peine.", s:[asI(3, '2km', 120), sl(60)]},
+  {ph:4, race:true, note:"Semaine de course. Fais la sortie 1 en début de semaine (mardi ou mercredi), puis repos ou 20 min de trot très facile la veille.", s:[
+    {t:'frac', title:'Rappel allure · 3 × 5 min', why:"Garder les jambes vives sans te fatiguer.", blocks:[E(20), R(3,'5min','AS',120), LD(4), E(5)], tip:"Ça doit paraître facile. Si ce n'est pas le cas, c'est la fatigue accumulée : elle disparaîtra d'ici samedi."},
+    {t:'race', title:'COURSE · Semi-marathon', why:"Le jour J. Samedi 15 mai.", blocks:[['race']]}]}
+];
+WEEKS.forEach((w,i) => { w.n = i+1; w.start = new Date(START.getTime() + i*7*864e5); w.s.forEach((s,j) => s.id = 'w'+(i+1)+'s'+(j+1)); });
+
+/* ---------- Segment bar & duration ---------- */
+function segments(sess){
+  const segs = [];
+  sess.blocks.forEach(b => {
+    if (b[0] === 'ef') segs.push(['EF', b[1]*60]);
+    else if (b[0] === 'ld') segs.push(['LD', b[1]*45]);
+    else if (b[0] === 'rep') {
+      for (let i = 0; i < b[1]; i++) {
+        segs.push([b[3], workSec(b[2], b[3])]);
+        if (i < b[1]-1 && b[4]) segs.push(['REC', recSec(b[4])]);
+      }
+    }
+    else if (b[0] === 'test') { segs.push(['EF', 20*60], ['LD', 180], ['10K', 10*paceMid('10K')], ['EF', 600]); }
+    else if (b[0] === 'race') { segs.push(['EF', 600], ['AS', SEMI*paceMid('AS')]); }
+  });
+  return segs;
+}
+const totalSec = sess => segments(sess).reduce((a,s) => a + s[1], 0);
+function barHTML(sess){
+  const segs = segments(sess), tot = totalSec(sess);
+  return '<div class="bar">' + segs.map(s => `<i style="flex:${s[1]/tot};background:var(--z-${s[0]})"></i>`).join('') + '</div>';
+}
+const P_ = z => `<span class="pace">${paceStr(z)}</span>`;
+
+/* ---------- Déroulé ---------- */
+function stepsHTML(sess){
+  const hasRep = sess.blocks.some(b => b[0] === 'rep');
+  const out = [];
+  sess.blocks.forEach((b, i) => {
+    if (b[0] === 'ef') {
+      let label = 'Footing';
+      if (sess.t === 'sl') label = 'Sortie longue';
+      if (hasRep && i === 0) label = 'Échauffement';
+      if (hasRep && i === sess.blocks.length-1) label = 'Retour au calme';
+      out.push(`<span class="lbl">${label} :</span> ${b[1]} min en endurance fondamentale ${P_('EF')}${b[2] ? '. ' + b[2] : ''}`);
+    }
+    else if (b[0] === 'ld') {
+      out.push(`<span class="lbl">${b[1]} lignes droites :</span> accélère progressivement sur ~80 m jusqu'à 85-90 % de ta vitesse max, puis reviens en marchant au point de départ. Reste relâché, ce n'est pas un sprint.`);
+    }
+    else if (b[0] === 'rep') {
+      const [, reps, work, z, rec] = b;
+      const pw = parseWork(work);
+      const zone = ZONES[z];
+      let effort;
+      if (z === 'COTE') effort = `<b>${pw.label} en montée</b>, effort fort (8-9/10)`;
+      else {
+        const est = pw.m ? ` <span class="small">(soit ≈ ${fmtDur(workSec(work, z))} par répétition)</span>` : '';
+        effort = `<b>${pw.label}</b> à ${zone.name.charAt(0).toLowerCase() + zone.name.slice(1)} ${P_(z)}${est}`;
+      }
+      const recTxt = rec === 'descente' ? 'redescends en trottinant tranquillement' : `<b>${fmtDur(rec)}</b> de récup en trottinant très lentement (marcher, c'est OK si besoin)`;
+      if (reps === 1) out.push(`<span class="lbl">Bloc principal :</span> ${effort}, d'une traite.`);
+      else out.push(`<span class="lbl">Répète ${reps} fois :</span><ul><li>${effort}</li><li>puis ${recTxt}</li></ul><span class="small">Pas de récup après la dernière répétition : tu enchaînes directement sur la suite. Total d'effort : ${fmtDur(reps*workSec(work, z))}.</span>`);
+    }
+    else if (b[0] === 'test') {
+      out.push(`<span class="lbl">Échauffement :</span> 20 min en endurance fondamentale ${P_('EF')} + 4 lignes droites.`);
+      out.push(`<span class="lbl">10 km à fond, mais régulier :</span> pars sur ${P_('10K')} et ne t'enflamme pas au départ. Après le 5e km, accélère si tu te sens bien.`);
+      out.push(`<span class="lbl">Retour au calme :</span> 10 min de trot.`);
+      out.push(`<span class="lbl">Lecture du résultat :</span><ul><li>moins de 45 min : 1h35 (4'30/km) est jouable</li><li>entre 45 et 48 min : vise 1h40</li><li>plus de 48 min : vise 1h45</li></ul>
+        <div class="inline-test"><input type="text" placeholder="ex. 46:20" id="test-input"><button class="btn" id="test-save">Enregistrer</button></div>`);
+    }
+    else if (b[0] === 'race') {
+      const as = paceMid('AS');
+      out.push(`<span class="lbl">Avant :</span> dîner normal la veille (riche en féculents, rien de nouveau), petit-déjeuner 3h avant le départ. Échauffement : 10 min de trot + 3 lignes droites, 20-30 min avant le départ.`);
+      out.push(`<span class="lbl">Km 1 à 3 :</span> 5 s/km plus lent que ton objectif <span class="pace">${fmtPace(as+5)}/km</span>. Ne te laisse pas embarquer par le peloton, c'est là qu'on perd une course.`);
+      out.push(`<span class="lbl">Km 3 à 15 :</span> allure objectif ${P_('AS')}, la plus régulière possible.`);
+      out.push(`<span class="lbl">Km 15 à l'arrivée :</span> si tu te sens bien, accélère progressivement. Sinon, accroche-toi à l'allure.`);
+      out.push(`<span class="lbl">Ravitos :</span> quelques gorgées à chaque ravito. Un gel vers le km 8-10 et un vers le km 15, uniquement si tu les as testés à l'entraînement.`);
+    }
+  });
+  return '<ol class="steps">' + out.map(x => `<li>${x}</li>`).join('') + '</ol>';
+}
+
+/* ---------- Render plan ---------- */
+const TAGS = {foot:['Footing','EF'], sl:['Sortie longue','AS'], frac:['Fractionné','SEUIL'], test:['Test','10K'], race:['Course','5K']};
+const fmtDate = d => d.toLocaleDateString('fr-FR', {day:'numeric', month:'short'});
+function currentWeek(){
+  const now = new Date(), idx = Math.floor((now - START) / (7*864e5));
+  return now < START ? 1 : Math.min(Math.max(idx+1, 1), WEEKS.length);
+}
+
+function renderPlan(){
+  const cw = currentWeek();
+  let html = '', lastPh = -1;
+  WEEKS.forEach(w => {
+    if (w.ph !== lastPh) { lastPh = w.ph; html += `<div class="phase"><h2>${PHASES[w.ph].name}</h2><p>${PHASES[w.ph].desc}</p></div>`; }
+    const end = new Date(w.start.getTime() + 6*864e5);
+    const allDone = w.s.every(s => state.done[s.id]);
+    const badges = (w.n === cw ? '<span class="badge now">Cette semaine</span>' : '') +
+                   (w.light ? '<span class="badge light">Allégée</span>' : '') +
+                   (w.test ? '<span class="badge">Test</span>' : '') +
+                   (w.race ? '<span class="badge now">Course</span>' : '');
+    html += `<div class="week ${w.n === cw ? 'current' : ''} ${allDone ? 'done' : ''}" id="week-${w.n}">
+      <div class="whead"><h3>Semaine ${w.n}</h3><span class="dates">${fmtDate(w.start)} → ${fmtDate(end)}</span>${badges}</div>
+      ${w.note ? `<div class="wnote">${w.note}</div>` : ''}
+      ${w.s.map((s, j) => {
+        const done = state.done[s.id];
+        const tag = TAGS[s.t];
+        const mainZone = (s.blocks.find(b => b[0] === 'rep') || [])[3];
+        const tagColor = s.t === 'frac' && mainZone ? mainZone : tag[1];
+        const dur = s.t === 'race' ? '21,1 km' : '~' + Math.round(totalSec(s)/60/5)*5 + ' min';
+        return `<div class="sess ${done ? 'isdone' : ''}">
+          <input type="checkbox" data-id="${s.id}" ${done ? 'checked' : ''} aria-label="Séance faite">
+          <details>
+            <summary>
+              <div class="stitle"><span class="tag" style="background:var(--z-${tagColor})">${s.t === 'frac' && mainZone ? ZONES[mainZone].short : tag[0]}</span><h4>Sortie ${j+1} · ${s.title}</h4><span class="dur">${dur}</span></div>
+              ${barHTML(s)}
+              ${done ? `<span class="donedate">✓ Faite le ${new Date(done).toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'})}</span> ` : ''}<span class="more">Voir le détail</span>
+            </summary>
+            <div class="body">
+              <p class="why">${s.why}</p>
+              ${stepsHTML(s)}
+              ${s.tip ? `<div class="tip"><b>Le bon réflexe</b>${s.tip}</div>` : ''}
+            </div>
+          </details>
+        </div>`;
+      }).join('')}
+    </div>`;
+  });
+  document.getElementById('plan').innerHTML = html;
+  bindTest();
+  renderStats();
+}
+
+function bindTest(){
+  const btn = document.getElementById('test-save'); if (!btn) return;
+  btn.onclick = () => {
+    const t = parseTime(document.getElementById('test-input').value);
+    if (!t || t < 1500 || t > 5400) { alert("Format attendu : 46:20"); return; }
+    state.ref = {dist:10, time:t}; save(); renderAll();
+    showTab('paces');
+  };
+}
+
+function renderStats(){
+  const all = WEEKS.flatMap(w => w.s), done = all.filter(s => state.done[s.id]).length;
+  document.getElementById('st-done').textContent = done + '/' + all.length;
+  document.getElementById('prog').style.width = (done/all.length*100) + '%';
+  const days = Math.ceil((RACE - new Date()) / 864e5);
+  document.getElementById('st-days').textContent = days > 0 ? days : '🏁';
+  document.getElementById('st-target').textContent = fmtPace(state.target/SEMI) + '/km';
+}
+
+/* ---------- Paces tab ---------- */
+function renderPaces(){
+  document.getElementById('ref-dist').value = String(state.ref.dist);
+  document.getElementById('ref-time').value = fmtDur(state.ref.time);
+  const opt = ['6300','6000','5700'].includes(String(state.target));
+  document.getElementById('target').value = opt ? String(state.target) : 'custom';
+  document.getElementById('custom-wrap').style.display = opt ? 'none' : 'flex';
+  if (!opt) document.getElementById('target-custom').value = fmtDur(state.target);
+
+  const order = ['EF','FART','SEUIL','AS','10K','5K','COTE'];
+  document.getElementById('pace-table').innerHTML =
+    '<tr><th>Zone</th><th>Allure</th><th>Sensation</th></tr>' +
+    order.map(z => `<tr><td><span class="dot" style="background:var(--z-${z})"></span><b>${ZONES[z].name}</b><br><span class="small">${ZONES[z].use}</span></td>
+      <td>${z === 'COTE' ? '<span class="small">au ressenti</span>' : P_(z)}</td>
+      <td>${ZONES[z].eff}<br><span class="small">${ZONES[z].talk}</span></td></tr>`).join('');
+
+  const eq = semiEq(), gap = (eq - state.target) / eq * 100;
+  let msg = `<div class="small" style="margin-top:12px">Ton niveau actuel équivaut à <b>${fmtDur(eq)}</b> sur semi (${fmtPace(P())}/km). Objectif : <b>${fmtDur(state.target)}</b>.</div>`;
+  if (gap > 8) msg += `<div class="warn">L'écart avec ton objectif est encore grand (${Math.round(gap)} %). C'est normal avant mars : ton niveau va beaucoup monter. Les blocs « allure semi » n'arrivent qu'après le test 10 km, ajuste l'objectif à ce moment-là.</div>`;
+  document.getElementById('pace-msg').innerHTML = msg;
+}
+
+/* ---------- Lexique ---------- */
+const LEX = [
+  ['Endurance fondamentale (EF)', "Allure lente et facile, à laquelle tu peux discuter. Environ 80 % de ton entraînement se fait à cette allure. Elle développe le cœur, les capillaires et les tendons sans fatiguer. Ça paraît trop lent, mais c'est voulu."],
+  ['Fractionné', "Une séance où tu alternes des efforts rapides (les « répétitions ») et des moments lents (les « récupérations »). Exemple : <b>3 × 8 min, récup 2 min</b> = 8 min vite, 2 min de trot, 8 min vite, 2 min de trot, 8 min vite. Toujours précédé d'un échauffement et suivi d'un retour au calme."],
+  ["Lire une séance : « 6 × 1000 m, r = 1'30 »", "« 6 × » = 6 répétitions. « 1000 m » = la distance de chaque répétition. « r = 1'30 » = 1 min 30 de récupération entre chaque. Le temps estimé de chaque répétition est indiqué si tu n'as pas de montre GPS."],
+  ['Récupération (récup)', "Le moment lent entre deux répétitions. On trottine très lentement (ou on marche si besoin) pour faire redescendre le cœur. On ne s'arrête pas complètement, sauf indication."],
+  ['Seuil', "L'allure que tu pourrais tenir environ 1 heure en course. « Confortablement difficile » : tu respires fort mais régulièrement, et tu peux dire quelques mots. C'est la séance clé pour progresser sur semi."],
+  ['VMA (Vitesse Maximale Aérobie)', "La vitesse à laquelle ton cœur et tes poumons tournent à fond. On la travaille par des répétitions courtes (400 m) très rapides. C'est ta « cylindrée ». Le foot t'en fait déjà travailler beaucoup."],
+  ['Allure semi (AS)', "L'allure de ton objectif le jour J. On la travaille à partir de mars pour qu'elle devienne naturelle."],
+  ['Lignes droites', "Des accélérations progressives sur 60-100 m, jusqu'à 85-90 % de ta vitesse max, en restant relâché. Retour en marchant. Elles réveillent la foulée sans fatiguer."],
+  ['Fartlek', "« Jeu d'allure » en suédois. Du fractionné au ressenti, sans chrono strict : tu accélères, tu ralentis. Parfait pour découvrir."],
+  ['Côtes', "Répétitions courtes en montée. Elles renforcent les jambes et la foulée, avec moins de chocs que sur le plat."],
+  ['Sortie longue (SL)', "La sortie la plus longue de la semaine, en endurance fondamentale. C'est elle qui te permettra de tenir 21 km. À ne jamais courir trop vite."],
+  ['Semaine allégée', "Toutes les 3-4 semaines, on réduit le volume. C'est pendant le repos que le corps progresse : ne saute pas ces semaines pour « en faire plus »."],
+  ['Échelle d\'effort (sur 10)', "1 = marche, 10 = sprint maximal. EF = 3-4, allure semi = 6-7, seuil = 7, allure 10 km = 8, VMA = 9. Si tu n'as pas de montre, cette échelle suffit."],
+  ['Foot + course : les règles', "Pas de sortie longue le lendemain d'un match. Si un match tombe la même semaine qu'une séance de fractionné, laisse 48 h entre les deux. Douleur au tendon d'Achille, au mollet ou aux ischios qui dure plus de 2-3 jours : coupe la course 3-4 jours, ne force pas dessus. Si tu es cuit après un match, transforme la séance de fractionné en footing EF."],
+  ['Et si je rate une séance ?', "Ne la rattrape pas, et ne fais pas 2 séances dures d'affilée. Reprends simplement le programme là où tu en es. Si tu rates une semaine entière, refais la dernière semaine terminée avant de continuer."]
+];
+document.getElementById('lexique').innerHTML = LEX.map(([t, d]) => `<dt>${t}</dt><dd><p>${d}</p></dd>`).join('');
+
+document.getElementById('legend').innerHTML = ['EF','FART','SEUIL','AS','10K','5K','COTE','REC']
+  .map(z => `<span><span class="dot" style="background:var(--z-${z})"></span>${z === 'REC' ? 'Récup' : ZONES[z].short}</span>`).join('');
+
+/* ---------- Events ---------- */
+document.getElementById('plan').addEventListener('change', e => {
+  if (e.target.type !== 'checkbox') return;
+  const id = e.target.dataset.id;
+  if (e.target.checked) state.done[id] = new Date().toISOString(); else delete state.done[id];
+  save(); renderPlan();
+});
+document.getElementById('target').addEventListener('change', e => {
+  document.getElementById('custom-wrap').style.display = e.target.value === 'custom' ? 'flex' : 'none';
+});
+document.getElementById('save-paces').onclick = () => {
+  const dist = parseFloat(document.getElementById('ref-dist').value);
+  const t = parseTime(document.getElementById('ref-time').value);
+  if (!t) { alert('Temps invalide. Exemples : 2h06, 45:30, 1:52:10'); return; }
+  state.ref = {dist, time:t};
+  const tv = document.getElementById('target').value;
+  const target = tv === 'custom' ? parseTime(document.getElementById('target-custom').value) : parseInt(tv);
+  if (!target || target < 3600 || target > 10800) { alert("Objectif invalide. Exemple : 1h38"); return; }
+  state.target = target;
+  save(); renderAll();
+};
+document.getElementById('export').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], {type:'application/json'}));
+  a.download = 'prepa-semi-sauvegarde.json'; a.click();
+};
+document.getElementById('import-btn').onclick = () => document.getElementById('import').click();
+document.getElementById('import').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  f.text().then(txt => { try { state = Object.assign(state, JSON.parse(txt)); save(); renderAll(); alert('Sauvegarde restaurée.'); } catch(err){ alert('Fichier invalide.'); } });
+};
+document.getElementById('reset').onclick = () => { if (confirm('Décocher toutes les séances ?')) { state.done = {}; save(); renderAll(); } };
+
+function showTab(name){
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.id === 'tab-' + name));
+  window.scrollTo({top:0});
+}
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+
+function renderAll(){ renderPlan(); renderPaces(); }
+renderAll();
+const cur = document.getElementById('week-' + currentWeek());
+if (cur && currentWeek() > 1) setTimeout(() => cur.scrollIntoView({block:'start'}), 50);
+</script>
+</body>
+</html>
